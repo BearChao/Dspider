@@ -24,12 +24,12 @@ public class UnreadQuee {
         return urlQueue.isEmpty();  
     }  
          
-    public  static int size()  
+    public synchronized static int size()  
     {  
         return urlQueue.size();  
     }  
          
-    public  static boolean isContains(String url)  
+    public synchronized static boolean isContains(String url)  
     {  
         return urlQueue.contains(url);  
     }  

@@ -1,12 +1,16 @@
 package com.nickzy.dspider;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FunctionKit {
 	public static int depth = 0;
+	public static int threads = 1;
+	public static boolean thread = false;
 	
 	//获取匹配的值
 	public static List<String> doRegex(String content,String regex){
@@ -24,9 +28,15 @@ public class FunctionKit {
 	
 	//List去重复，使用hashset不保证顺序
 	 public static List removeDuplicate(List list)   { 
-		    HashSet h  =   new  HashSet(list); 
-		    list.clear(); 
-		    list.addAll(h); 
+		 Set set  =   new  HashSet(); 
+	     List newList  =   new  ArrayList(); 
+	     for(Iterator iter  =  list.iterator(); iter.hasNext();) { 
+	         Object element  =  iter.next(); 
+	         if  (set.add(element)) 
+	            newList.add(element); 
+	     } 
+	     list.clear(); 
+	     list.addAll(newList); 
 		    return list; 
 		} 
 	 
