@@ -5,11 +5,14 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 
 public class Downloader implements  Runnable {
-	Spider spider;
-	public Downloader(Spider spider){
+	private Spider spider;
+	private CountDownLatch countDownLatch;
+	public Downloader(Spider spider, CountDownLatch countDownLatch){
 		this.spider = spider;
+		this.countDownLatch = countDownLatch;
 	}
 	@Override
 	public void run() {
@@ -38,20 +41,19 @@ public class Downloader implements  Runnable {
 							System.out.println(threadid+"下载完毕");
 							String content = sb.toString();
 							String links = FunctionKit.getHrefOfContent(content);//存储符合要求的链接地址
-							List<String> link = DataParser.linkParser(content,spider);//匹配网页内的链接地址
-							for(String s:link) 
-								UnreadQuee.addElem(s);	
-							List<String> data = DataParser.dataParser(content,spider);//匹配网页内容
-														
-					        System.out.println(threadid+"待处理的链接数"+UnreadQuee.size());  
+							DataParser.urlParser(content, spider);//匹配网页内的链接地址
+							DataParser.dataParser(content,spider);//匹配网页内容
+							System.out.println(threadid+"待处理的链接数"+UnreadQuee.size());  
 					        System.out.println(threadid+"已处理的页面数"+FinishQuee.size()); 
-							DataSolver.dataSolver(data);//保存解析后的内容
+					        System.out.println(threadid+"解析到的数据数"+PipelineQuee.size());
 							
 					}catch (Exception e){
 							System.err.println(threadid+"下载失败");
-							//e.printStackTrace();
+							e.printStackTrace();
 					}
 			}
-		}System.out.println(threadid+"成功退出");
+		}
+		System.out.println(threadid+"成功退出");
+		countDownLatch.countDown();
 	}
 }

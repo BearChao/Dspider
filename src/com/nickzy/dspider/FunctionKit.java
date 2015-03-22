@@ -11,6 +11,10 @@ public class FunctionKit {
 	public static int depth = 0;
 	public static int threads = 1;
 	public static boolean thread = false;
+	public static int reg_datas = 1;//查找数据正则表达式数量
+	public static int reg_urls = 1;
+	public static boolean isDone = false;//程序执行结束标记
+	
 	
 	//获取匹配的值
 	public static List<String> doRegex(String content,String regex){
